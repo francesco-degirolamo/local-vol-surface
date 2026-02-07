@@ -12,8 +12,6 @@ dist/
 *.egg-info/
 
 # Jupyter
-.ipynb_checkpoints/
-*.ipynb
 
 # Output files (results from analysis)
 *.html
@@ -23,7 +21,6 @@ dist/
 *.pdf
 
 # Jupyter
-.ipynb_checkpoints/
 *.ipynb[_checkpoints]
 
 # WRDS credentials (IMPORTANT - DO NOT COMMIT)
@@ -45,3 +42,4 @@ wrds_config.py
 # OS
 .DS_Store
 Thumbs.db
+.ipynb_checkpoints/
