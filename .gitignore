@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Output files (results from analysis)
+*.html
+*.csv
+*.npz
+*.png
+*.pdf
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb[_checkpoints]
+
+# WRDS credentials (IMPORTANT - DO NOT COMMIT)
+wrds_config.py
+.pgpass
+.wrdsauth
+.env
+
+# Environment files
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

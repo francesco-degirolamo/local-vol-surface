@@ -1,0 +1,42 @@
+\babel@toc {english}{}\relax 
+\contentsline {section}{\numberline {1}Introduction}{3}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Motivation}{3}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Research Objectives}{3}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Key Contributions}{3}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Document Structure}{4}{subsection.1.4}%
+\contentsline {section}{\numberline {2}Theoretical Framework}{4}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Dupire's Local Volatility Model}{4}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}No-Arbitrage Conditions}{4}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}SVI Parametrization}{5}{subsection.2.3}%
+\contentsline {section}{\numberline {3}Methodology}{5}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Data Pipeline}{5}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Data Source}{5}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}Data Filters}{5}{subsubsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.2}SVI Calibration Procedure}{6}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Slice-by-Slice Fitting}{6}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Parameter Constraints}{6}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}Maturity Interpolation}{6}{subsubsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.3}Dupire Formula Implementation}{7}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.1}Call Price Computation}{7}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.2}Numerical Differentiation}{7}{subsubsection.3.3.2}%
+\contentsline {subsubsection}{\numberline {3.3.3}Explicit Convexity Enforcement}{7}{subsubsection.3.3.3}%
+\contentsline {section}{\numberline {4}Systematic Optimization}{7}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Initial Problem Statement}{7}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Hypothesis Testing}{8}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1}Smoothing Parameter Grid Search}{8}{subsubsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.3}Root Cause Analysis}{8}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Implemented Solutions}{9}{subsection.4.4}%
+\contentsline {subsubsection}{\numberline {4.4.1}SVI Parameter Tightening}{9}{subsubsection.4.4.1}%
+\contentsline {subsubsection}{\numberline {4.4.2}Optimized Smoothing Strategy}{9}{subsubsection.4.4.2}%
+\contentsline {subsubsection}{\numberline {4.4.3}Explicit Enforcement}{9}{subsubsection.4.4.3}%
+\contentsline {subsection}{\numberline {4.5}Final Results}{9}{subsection.4.5}%
+\contentsline {section}{\numberline {5}Empirical Results}{10}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Calibration Quality}{10}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Arbitrage Validation}{10}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Local Volatility Characteristics}{10}{subsection.5.3}%
+\contentsline {section}{\numberline {6}Conclusions and Future Work}{11}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Summary of Contributions}{11}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Academic Implications}{11}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Practical Applications}{11}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}Future Research Directions}{11}{subsection.6.4}%
+\contentsline {subsection}{\numberline {6.5}Code Availability}{12}{subsection.6.5}%
