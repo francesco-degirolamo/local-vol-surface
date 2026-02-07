@@ -3,8 +3,7 @@
 
 **Author**: Francesco De Girolamo  
 **Date**: February 2026  
-**Institution**: [Your Institution]  
-**Course**: [Your Course]  
+**Institution**: Columbia University  
 
 Complete research pipeline for building **Local Volatility surfaces** from WRDS OptionMetrics data using the **Dupire (1994) formula**.
 
