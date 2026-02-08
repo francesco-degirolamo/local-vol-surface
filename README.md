@@ -141,8 +141,8 @@ builder = LocalVolSurfaceBuilder(wrds_username='your_user')
 # Build full pipeline
 results = builder.build_full_pipeline(
     ticker='AAPL',
-    start_date='2025-12-01',
-    end_date='2026-02-07'
+    start_date='2025-08-01',
+    end_date='2025-08-29'
 )
 
 # Access results
@@ -165,8 +165,8 @@ builder = LocalVolSurfaceBuilder(wrds_username='your_username')
 # Build surfaces for a single stock
 results = builder.build_full_pipeline(
     ticker='AAPL',
-    start_date='2026-01-01',
-    end_date='2026-02-06'
+    start_date='2025-08-01',
+    end_date='2025-08-29'
 )
 
 # Access results
@@ -180,7 +180,7 @@ data = results['data']
 
 ```python
 # Fetch and clean data
-df_raw = builder.fetch_option_data('TSLA', '2026-01-01', '2026-02-06')
+df_raw = builder.fetch_option_data('TSLA', '2025-08-01', '2025-08-29')
 df_clean = builder.clean_and_prepare(df_raw)
 
 # Build IV surface
