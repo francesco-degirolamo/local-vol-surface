@@ -141,8 +141,8 @@ builder = LocalVolSurfaceBuilder(wrds_username='your_user')
 # Build full pipeline
 results = builder.build_full_pipeline(
     ticker='AAPL',
-    start_date='2025-08-01',
-    end_date='2025-08-29'
+    start_date='2025-01-01',
+    end_date='2025-12-31'
 )
 
 # Access results
@@ -165,8 +165,8 @@ builder = LocalVolSurfaceBuilder(wrds_username='your_username')
 # Build surfaces for a single stock
 results = builder.build_full_pipeline(
     ticker='AAPL',
-    start_date='2025-08-01',
-    end_date='2025-08-29'
+    start_date='2025-01-01',
+    end_date='2025-12-31'
 )
 
 # Access results
