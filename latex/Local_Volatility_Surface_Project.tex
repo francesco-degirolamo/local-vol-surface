@@ -60,7 +60,7 @@ An Arbitrage-Free Implementation}}
 \maketitle
 
 \begin{abstract}
-This paper presents a comprehensive implementation of the Dupire (1994) local volatility framework for equity option pricing. We develop a production-quality pipeline that transforms market-observed implied volatilities into arbitrage-free local volatility surfaces. The methodology employs Stochastic Volatility Inspired (SVI) parametrization for smile interpolation, coupled with explicit convexity enforcement to guarantee no-arbitrage conditions. Through systematic optimization, we achieve zero post-enforcement arbitrage violations while maintaining excellent calibration quality (RMSE < 0.5\%). The implementation is validated on U.S. equity options data from WRDS OptionMetrics, demonstrating robustness across different underlyings (AAPL, TSLA, NVDA) and market conditions. This work contributes both a rigorous theoretical framework and a practical tool suitable for academic research and industry applications.
+This paper presents a comprehensive implementation of the Dupire (1994) local volatility framework for equity option pricing. We develop a production-quality pipeline that transforms market-observed implied volatilities into arbitrage-free local volatility surfaces. The methodology employs Stochastic Volatility Inspired (SVI) parametrization for smile interpolation, coupled with explicit convexity enforcement to guarantee no-arbitrage conditions. Through systematic optimization, we achieve zero post-enforcement arbitrage violations while maintaining excellent calibration quality (RMSE $< 0.5\%$). The implementation is validated on U.S. equity options data from WRDS OptionMetrics, demonstrating robustness across different underlyings (AAPL, TSLA, NVDA) and market conditions. This work contributes both a rigorous theoretical framework and a practical tool suitable for academic research and industry applications.
 \end{abstract}
 
 \tableofcontents
@@ -529,7 +529,7 @@ The complete implementation, including:
     \item Documentation (technical report, optimization summary)
 \end{itemize}
 
-is available at: \url{https://github.com/fdegirolamo/local-vol-surface}
+is available at: \url{https://github.com/francesco-degirolamo/local-vol-surface}
 
 
 \begin{thebibliography}{99}
