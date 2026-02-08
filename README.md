@@ -46,13 +46,13 @@ Local volatility models (Dupire, 1994; Derman & Kani, 1994) provide a determinis
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  1. Data Acquisition (WRDS OptionMetrics)                  │
+│  1. Data Acquisition (WRDS OptionMetrics)                   │
 │     • Fetch option prices, IVs, Greeks                      │
 │     • Query by ticker, date range                           │
 └────────────────────┬────────────────────────────────────────┘
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  2. Data Cleaning & Feature Engineering                    │
+│  2. Data Cleaning & Feature Engineering                     │
 │     • Bid-ask spread filter (<10%)                          │
 │     • Moneyness normalization (K/S)                         │
 │     • Time to maturity (years)                              │
@@ -60,24 +60,24 @@ Local volatility models (Dupire, 1994; Derman & Kani, 1994) provide a determinis
 └────────────────────┬────────────────────────────────────────┘
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  3. Implied Volatility Surface (Market View)               │
+│  3. Implied Volatility Surface (Market View)                │
 │     • RBF 2D interpolation (cubic kernel)                   │
 │     • Gaussian smoothing (σ=0.8)                            │
 │     • Regular grid (50×30 default)                          │
 └────────────────────┬────────────────────────────────────────┘
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  4. Call Price Surface (Black-Scholes)                     │
+│  4. Call Price Surface (Black-Scholes)                      │
 │     • IV → Call prices via BS formula                       │
 │     • Moneyness × Spot = Absolute strikes                   │
 └────────────────────┬────────────────────────────────────────┘
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  5. Local Volatility (Dupire Formula)                      │
+│  5. Local Volatility (Dupire Formula)                       │
 │     • ∂C/∂T: Time derivative (forward diff)                 │
 │     • ∂C/∂K: Strike derivative (central diff)               │
 │     • ∂²C/∂K²: Second derivative (convexity)                │
-│     • σ²ₗₒcₐₗ = [∂C/∂T + rK∂C/∂K] / [½K²∂²C/∂K²]           │
+│     • σ²ₗₒcₐₗ = [∂C/∂T + rK∂C/∂K] / [½K²∂²C/∂K²]             │
 └────────────────────┬────────────────────────────────────────┘
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
