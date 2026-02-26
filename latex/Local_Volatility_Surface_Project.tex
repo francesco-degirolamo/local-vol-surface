@@ -118,10 +118,10 @@ where $\mu$ is the drift rate and $W_t$ is a standard Brownian motion.
 Given a continuum of European call option prices $C(K,T)$ for all strikes $K$ and maturities $T$, the local volatility function is uniquely determined by:
 
 \begin{equation}\label{eq:dupire}
-    \sigma_{\text{local}}^2(K,T) = \frac{\frac{\partial C}{\partial T} + rK\frac{\partial C}{\partial K}}{\frac{1}{2}K^2\frac{\partial^2 C}{\partial K^2}}
+    \sigma_{\text{local}}^2(K,T) = \frac{\frac{\partial C}{\partial T} + (r-q)K\frac{\partial C}{\partial K} + qC}{\frac{1}{2}K^2\frac{\partial^2 C}{\partial K^2}}
 \end{equation}
 
-where $r$ is the risk-free interest rate.
+where $r$ is the risk-free interest rate and $q$ is the continuous dividend yield.
 \end{theorem}
 
 \begin{proof}[Sketch]
@@ -264,8 +264,8 @@ SVI parameters are interpolated across maturities using:
 From the calibrated SVI surface, call prices are computed using Black-Scholes:
 
 \begin{align}
-    C(K,T) &= S_0 \Phi(d_1) - Ke^{-rT}\Phi(d_2) \\
-    d_1 &= \frac{\ln(S_0/K) + (r + \sigma^2/2)T}{\sigma\sqrt{T}} \\
+    C(K,T) &= S_0 e^{-qT}\Phi(d_1) - Ke^{-rT}\Phi(d_2) \\
+    d_1 &= \frac{\ln(S_0/K) + (r - q + \sigma^2/2)T}{\sigma\sqrt{T}} \\
     d_2 &= d_1 - \sigma\sqrt{T}
 \end{align}
 
@@ -286,7 +286,7 @@ We employ \textbf{Savitzky-Golay filters} \cite{Savitzky1964} for computing deri
 \STATE \quad $\frac{\partial^2 C}{\partial K^2} = \text{SavGol}(C_{\text{smooth}}, \text{deriv}=2)$
 \STATE Compute time derivative using Savitzky-Golay filter (window=7, order=3):
 \STATE \quad $\frac{\partial C}{\partial T} = \text{SavGol}(C_{\text{smooth}}, \text{deriv}=1)$
-\STATE Apply Dupire formula: $\sigma_{\text{local}}^2 = \frac{\frac{\partial C}{\partial T} + rK\frac{\partial C}{\partial K}}{\frac{1}{2}K^2\frac{\partial^2 C}{\partial K^2}}$
+\STATE Apply Dupire formula: $\sigma_{\text{local}}^2 = \frac{\frac{\partial C}{\partial T} + (r-q)K\frac{\partial C}{\partial K} + qC}{\frac{1}{2}K^2\frac{\partial^2 C}{\partial K^2}}$
 \STATE Clip to realistic range: $\sigma_{\text{local}} \in [0.05, 0.80]$\footnotemark
 \STATE Apply final smoothing: $\sigma_{\text{local}} = G_{\sigma=1.5}(\sigma_{\text{local}})$
 \STATE \textbf{Output:} Local volatility surface $\sigma_{\text{local}}(K,T)$

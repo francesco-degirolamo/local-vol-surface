@@ -336,7 +336,7 @@ def build_svi_surface(df, grid_size=(100, 50), min_points_per_slice=5):
     return K_grid, T_grid, IV_grid, S0, svi_params
 
 
-def compute_local_vol_savgol(K_grid, T_grid, IV_grid, S0, r=0.045):
+def compute_local_vol_savgol(K_grid, T_grid, IV_grid, S0, r=0.045, q=0.0):
     """
     Compute local volatility using Dupire formula with Savitzky-Golay derivatives.
     
@@ -351,6 +351,8 @@ def compute_local_vol_savgol(K_grid, T_grid, IV_grid, S0, r=0.045):
         Spot price
     r : float
         Risk-free rate
+    q : float
+        Continuous dividend yield
         
     Returns:
     --------
@@ -361,12 +363,12 @@ def compute_local_vol_savgol(K_grid, T_grid, IV_grid, S0, r=0.045):
     
     K_abs = K_grid * S0
     
-    # Convert IV to call prices using Black-Scholes
+    # Convert IV to call prices using Black-Scholes with continuous dividend yield
     from scipy.stats import norm
     
-    d1 = (np.log(S0 / K_abs) + (r + 0.5 * IV_grid**2) * T_grid) / (IV_grid * np.sqrt(T_grid))
+    d1 = (np.log(S0 / K_abs) + (r - q + 0.5 * IV_grid**2) * T_grid) / (IV_grid * np.sqrt(T_grid))
     d2 = d1 - IV_grid * np.sqrt(T_grid)
-    C_grid = S0 * norm.cdf(d1) - K_abs * np.exp(-r * T_grid) * norm.cdf(d2)
+    C_grid = S0 * np.exp(-q * T_grid) * norm.cdf(d1) - K_abs * np.exp(-r * T_grid) * norm.cdf(d2)
     
     # IMPROVED: Explicit convexity enforcement before derivatives
     # This ensures arbitrage-free local volatility surface
@@ -418,8 +420,8 @@ def compute_local_vol_savgol(K_grid, T_grid, IV_grid, S0, r=0.045):
     # Enforce convexity (d²C/dK² > 0)
     d2C_dK2 = np.maximum(d2C_dK2, 1e-8)
     
-    # Dupire formula
-    numerator = dC_dT + r * K_abs * dC_dK
+    # Dupire formula with continuous dividend yield
+    numerator = dC_dT + (r - q) * K_abs * dC_dK + q * C_smooth
     numerator = np.maximum(numerator, 1e-10)  # Must be positive
     denominator = 0.5 * K_abs**2 * d2C_dK2
     
@@ -451,7 +453,7 @@ def compute_local_vol_savgol(K_grid, T_grid, IV_grid, S0, r=0.045):
 import pandas as pd
 
 
-def check_arbitrage_svi(K_grid, T_grid, IV_grid, S0, r=0.045):
+def check_arbitrage_svi(K_grid, T_grid, IV_grid, S0, r=0.045, q=0.0):
     """
     Check arbitrage conditions using EXACTLY the same smoothing as compute_local_vol_savgol.
     
@@ -467,9 +469,9 @@ def check_arbitrage_svi(K_grid, T_grid, IV_grid, S0, r=0.045):
     K_abs = K_grid * S0
     
     # Convert IV to call prices (same as in compute_local_vol_savgol)
-    d1 = (np.log(S0 / K_abs) + (r + 0.5 * IV_grid**2) * T_grid) / (IV_grid * np.sqrt(T_grid))
+    d1 = (np.log(S0 / K_abs) + (r - q + 0.5 * IV_grid**2) * T_grid) / (IV_grid * np.sqrt(T_grid))
     d2 = d1 - IV_grid * np.sqrt(T_grid)
-    C_grid = S0 * norm.cdf(d1) - K_abs * np.exp(-r * T_grid) * norm.cdf(d2)
+    C_grid = S0 * np.exp(-q * T_grid) * norm.cdf(d1) - K_abs * np.exp(-r * T_grid) * norm.cdf(d2)
     
     # Apply EXACTLY the same smoothing as compute_local_vol_savgol (sigma=3.0)
     C_smooth = gaussian_filter(C_grid, sigma=3.0)

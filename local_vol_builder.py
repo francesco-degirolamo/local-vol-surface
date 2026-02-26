@@ -48,7 +48,7 @@ class LocalVolSurfaceBuilder:
     calibrated local volatility surfaces using the Dupire formula.
     """
     
-    def __init__(self, wrds_username=None, risk_free_rate=0.045):
+    def __init__(self, wrds_username=None, risk_free_rate=0.045, dividend_yield=0.0):
         """
         Initialize connection to WRDS.
         
@@ -58,6 +58,8 @@ class LocalVolSurfaceBuilder:
             Your WRDS username (falls back to env var WRDS_USERNAME)
         risk_free_rate : float
             Risk-free rate (default: 4.5% - update from FRED/Bloomberg as needed)
+        dividend_yield : float
+            Continuous dividend yield (default: 0.0)
         """
         logger.info("Connecting to WRDS...")
         
@@ -69,6 +71,7 @@ class LocalVolSurfaceBuilder:
             # WRDS will use cached credentials from ~/.pgpass if available
             self.db = wrds.Connection(wrds_username=wrds_username) if wrds_username else wrds.Connection()
             self.r = risk_free_rate
+            self.q = dividend_yield
             logger.info("✓ Connected to WRDS successfully")
         except Exception as e:
             logger.error(f"Failed to connect to WRDS: {e}")
@@ -307,11 +310,11 @@ class LocalVolSurfaceBuilder:
         
         K_abs = K_grid * S0  # Moneyness → absolute strikes
         
-        # Black-Scholes formula
-        d1 = (np.log(S0 / K_abs) + (self.r + 0.5 * IV_grid**2) * T_grid) / (IV_grid * np.sqrt(T_grid))
+        # Black-Scholes formula with continuous dividend yield
+        d1 = (np.log(S0 / K_abs) + (self.r - self.q + 0.5 * IV_grid**2) * T_grid) / (IV_grid * np.sqrt(T_grid))
         d2 = d1 - IV_grid * np.sqrt(T_grid)
         
-        C_grid = S0 * norm.cdf(d1) - K_abs * np.exp(-self.r * T_grid) * norm.cdf(d2)
+        C_grid = S0 * np.exp(-self.q * T_grid) * norm.cdf(d1) - K_abs * np.exp(-self.r * T_grid) * norm.cdf(d2)
         
         return C_grid
     
@@ -338,8 +341,8 @@ class LocalVolSurfaceBuilder:
         # ENFORCE CONVEXITY (key for arbitrage-free)
         d2C_dK2 = np.maximum(d2C_dK2, 1e-6)
         
-        # Dupire formula
-        numerator = dC_dT + self.r * K_abs * dC_dK
+        # Dupire formula with continuous dividend yield
+        numerator = dC_dT + (self.r - self.q) * K_abs * dC_dK + self.q * C_smooth
         numerator = np.maximum(numerator, 1e-8)  # Must be positive
         denominator = 0.5 * K_abs**2 * d2C_dK2
         
@@ -537,7 +540,7 @@ class LocalVolSurfaceBuilder:
                 C_grid = self.iv_to_call_prices(K_grid, T_grid, IV_grid, S0)
                 
                 logger.info("[5/8] Computing Local Volatility (Savitzky-Golay)...")
-                LV_grid = compute_local_vol_savgol(K_grid, T_grid, IV_grid, S0, r=self.r)
+                LV_grid = compute_local_vol_savgol(K_grid, T_grid, IV_grid, S0, r=self.r, q=self.q)
                 
                 logger.info("[6/8] Checking arbitrage conditions...")
                 arb_check = self.check_arbitrage(C_grid, K_grid)

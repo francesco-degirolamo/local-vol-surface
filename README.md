@@ -46,13 +46,13 @@ Local volatility models (Dupire, 1994; Derman & Kani, 1994) provide a determinis
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  1. Data Acquisition (WRDS OptionMetrics)                   │
+│  1. Data Acquisition (WRDS OptionMetrics)                  │
 │     • Fetch option prices, IVs, Greeks                      │
 │     • Query by ticker, date range                           │
 └────────────────────┬────────────────────────────────────────┘
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  2. Data Cleaning & Feature Engineering                     │
+│  2. Data Cleaning & Feature Engineering                    │
 │     • Bid-ask spread filter (<10%)                          │
 │     • Moneyness normalization (K/S)                         │
 │     • Time to maturity (years)                              │
@@ -60,24 +60,24 @@ Local volatility models (Dupire, 1994; Derman & Kani, 1994) provide a determinis
 └────────────────────┬────────────────────────────────────────┘
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  3. Implied Volatility Surface (Market View)                │
+│  3. Implied Volatility Surface (Market View)               │
 │     • RBF 2D interpolation (cubic kernel)                   │
 │     • Gaussian smoothing (σ=0.8)                            │
 │     • Regular grid (50×30 default)                          │
 └────────────────────┬────────────────────────────────────────┘
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  4. Call Price Surface (Black-Scholes)                      │
+│  4. Call Price Surface (Black-Scholes)                     │
 │     • IV → Call prices via BS formula                       │
 │     • Moneyness × Spot = Absolute strikes                   │
 └────────────────────┬────────────────────────────────────────┘
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  5. Local Volatility (Dupire Formula)                       │
+│  5. Local Volatility (Dupire Formula)                      │
 │     • ∂C/∂T: Time derivative (forward diff)                 │
 │     • ∂C/∂K: Strike derivative (central diff)               │
 │     • ∂²C/∂K²: Second derivative (convexity)                │
-│     • σ²ₗₒcₐₗ = [∂C/∂T + rK∂C/∂K] / [½K²∂²C/∂K²]             │
+│     • σ²ₗₒcₐₗ = [∂C/∂T + (r-q)K∂C/∂K + qC] / [½K²∂²C/∂K²]  │
 └────────────────────┬────────────────────────────────────────┘
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
@@ -180,7 +180,7 @@ data = results['data']
 
 ```python
 # Fetch and clean data
-df_raw = builder.fetch_option_data('TSLA', '2025-08-01', '2025-08-29')
+df_raw = builder.fetch_option_data('TSLA', '2025-01-01', '2025-12-31')
 df_clean = builder.clean_and_prepare(df_raw)
 
 # Build IV surface
@@ -252,13 +252,14 @@ K_grid, T_grid, IV_grid, S0 = builder.build_iv_surface(
 
 The local volatility is computed using Dupire's formula:
 
-$$\sigma_{local}^2(K,T) = \frac{\frac{\partial C}{\partial T} + rK\frac{\partial C}{\partial K}}{\frac{1}{2}K^2\frac{\partial^2 C}{\partial K^2}}$$
+$$\sigma_{local}^2(K,T) = \frac{\frac{\partial C}{\partial T} + (r-q)K\frac{\partial C}{\partial K} + qC}{\frac{1}{2}K^2\frac{\partial^2 C}{\partial K^2}}$$
 
 Where:
 - $C(K,T)$ = Call price surface
 - $K$ = Strike price
 - $T$ = Time to maturity
 - $r$ = Risk-free rate
+- $q$ = Continuous dividend yield
 
 ### No-Arbitrage Conditions
 
